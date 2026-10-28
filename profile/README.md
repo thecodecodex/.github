@@ -2,78 +2,99 @@
 
 # The Code Codex
 
-**Study notes, hands-on guides and open-source tools for developers — in Portuguese and English.**
+**Study notes, hands-on guides, board games and zero-install client-side tools for developers — in Portuguese and English.**
 
-[thecodecodex.com](https://thecodecodex.com) · [Games](https://games.thecodecodex.com) · [Tools](https://thecodecodex.com/pt/tools/) · [`cli.js`](https://thecodecodex.com/cli.js) · [npm](https://www.npmjs.com/org/thecodecodex)
+[thecodecodex.com](https://thecodecodex.com) · [Tools](https://tools.thecodecodex.com) · [Games](https://games.thecodecodex.com) · [Switchyard](https://switchyard.thecodecodex.com) · [Design System](https://designsystem.thecodecodex.com) · [`cli.js`](https://thecodecodex.com/cli.js)
+
+[![Monorepo](https://img.shields.io/badge/monorepo-thecodecodex-black?style=flat&logo=github)](https://github.com/thecodecodex/thecodecodex)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 </div>
 
 ---
 
-## What we build
+## 🏛️ Ecosystem Architecture
 
-| Project | What it is | Stack | |
-| --- | --- | --- | --- |
-| [**portal**](https://github.com/thecodecodex/portal) | The [thecodecodex.com](https://thecodecodex.com) website: guides, notes, projects and ~20 client-side tools (CLT/PJ salary, invoices, PDF Studio, CPF/CNPJ, JWT, regex, diff…) | Astro · Preact · Tailwind 4 · Pagefind · Cloudflare | 🔒 private |
-| [**games**](https://github.com/thecodecodex/games) | [games.thecodecodex.com](https://games.thecodecodex.com): ~40 board, card and party games (chess, backgammon, truco, poker, domino…) with bots and peer-to-peer multiplayer — matches run in the host's browser | Astro · Preact · WebRTC · Cloudflare Workers | 🌐 public |
-| [**tools**](https://github.com/thecodecodex/tools) | Pure logic behind every tool, the zero-dependency terminal script `cli.js` and a catalog of AI agent skills | TypeScript · Vitest | [![npm](https://img.shields.io/npm/v/@thecodecodex/tools?label=%40thecodecodex%2Ftools)](https://www.npmjs.com/package/@thecodecodex/tools) |
-| [**design-system**](https://github.com/thecodecodex/design-system) | Tokens, five themes (light, paper, dusk, dark, high contrast), form components and match components for games (playing cards, player chips, icons) shared by every project | Tailwind 4 · React (Preact-compatible) | [![npm](https://img.shields.io/npm/v/@thecodecodex/design-system?label=%40thecodecodex%2Fdesign-system)](https://www.npmjs.com/package/@thecodecodex/design-system) |
-| [**switchyard**](https://github.com/thecodecodex/switchyard) | Local hub for teams working across many repositories: git dashboard, Azure Boards, GitHub PRs, E2E tests, mocks, databases and cloud logs — a web panel plus the `syd` CLI | Next.js · Go | 🔒 private |
+All projects are organized within a unified monorepo ([**thecodecodex/thecodecodex**](https://github.com/thecodecodex/thecodecodex)) powered by **pnpm workspaces**:
 
 ```mermaid
-flowchart LR
-  ds["@thecodecodex/design-system<br/>tokens · themes · components"]
-  tools["@thecodecodex/tools<br/>logic · cli.js · AI skills"]
-  portal["portal<br/>thecodecodex.com"]
-  sy["switchyard<br/>panel + syd CLI"]
-  games["games<br/>games.thecodecodex.com"]
-  ds --> portal
-  ds --> games
-  ds -.-> sy
-  tools --> portal
-  portal -- "ships" --> cli["thecodecodex.com/cli.js"]
+flowchart TD
+  subgraph monorepo["thecodecodex / thecodecodex"]
+    shell["packages/shell (@thecodecodex/shell)<br/>Tokens · 5 Themes · React Components · AppShell · ToolShell · GameLayout"]
+    portal["apps/portal (thecodecodex.com)<br/>Editorial content · Guides · Notes · Resume · Local search"]
+    tools["apps/tools (tools.thecodecodex.com)<br/>30+ Financial, PDF & Dev calculators · PWA · cli.js"]
+    games["apps/games (games.thecodecodex.com)<br/>40+ Board, Card & Party games · AI bots · WebRTC P2P"]
+    switchyard["apps/switchyard (switchyard.thecodecodex.com)<br/>Developer local workspace hub · syd CLI (Go) + Next.js panel"]
+
+    shell --> portal
+    shell --> tools
+    shell --> games
+    shell --> switchyard
+    tools -- "serves" --> cli["thecodecodex.com/cli.js"]
+  end
 ```
 
-## Principles
+---
 
-- **Everything runs on your machine.** The tools process data in the browser; nothing is uploaded.
-- **One logic, many surfaces.** The same functions power the website, the terminal (`cli.js`) and the tests.
-- **Open where it matters.** The logic (`tools`) and the visual language (`design-system`) are MIT-licensed and published to npm with provenance.
-- **Accessible by default.** Theme colours are chosen for text contrast (including a high-contrast theme), chart colours are validated for colour-vision deficiencies, and keyboard focus is always visible.
-- **Bilingual.** Content and tools exist in Portuguese and English, with the same URL parameters in both.
+## 📦 What we build
 
-## Try it from the terminal
+| Project | What it is | Stack | Status |
+| :--- | :--- | :--- | :--- |
+| [**Portal**](https://thecodecodex.com) | The main hub: engineering guides, quick study notes, project showcases and offline-ready search powered by Pagefind | Astro 5 · Preact · Tailwind CSS v4 · Pagefind | 🌐 [thecodecodex.com](https://thecodecodex.com) |
+| [**Tools**](https://tools.thecodecodex.com) | 30+ client-side developer, Brazilian tax/finance calculators (CLT x PJ, Simples Nacional, 13º, IRRF 2026), PDF Studio, converters and PWA | Astro 5 · Preact · Tailwind CSS v4 · Vitest | 🌐 [tools.thecodecodex.com](https://tools.thecodecodex.com) |
+| [**Games**](https://games.thecodecodex.com) | 40+ classic board, card, and party games (Chess, Mancala, Poker, Truco, Domino, Buraco...) with bot simulations and peer-to-peer multiplayer | Astro 5 · Preact · WebRTC · Durable Objects | 🌐 [games.thecodecodex.com](https://games.thecodecodex.com) |
+| [**Switchyard**](https://switchyard.thecodecodex.com) | Local developer environment hub for engineers managing multiple repositories: Git dashboard, Azure Boards, mocks, cloud logs, and the `syd` CLI | Go 1.26 · Next.js 16 (Turbopack) · Tailwind CSS v4 | 🌐 [switchyard.thecodecodex.com](https://switchyard.thecodecodex.com) |
+| [**Shell**](https://designsystem.thecodecodex.com) | Shared design system: design tokens, 5 themes, form controls, match views and application shells (`AppShell`, `ToolShell`, `GameLayout`) | React / Preact · Tailwind CSS v4 · Storybook | 📚 [designsystem.thecodecodex.com](https://designsystem.thecodecodex.com) |
 
-Every tool on the site also runs outside the browser, with the same parameters as its URL:
+---
+
+## 💡 Core Principles
+
+- **100% On-Device & Private:** In Tools and Games, all computation runs strictly inside your browser. No files, payroll figures or inputs ever leave your machine.
+- **One Logic, Multiple Surfaces:** The calculation models running in the browser are identical to those executing via the terminal script (`cli.js`) and validated in automated test suites.
+- **Accessible & Multi-Theme by Default:** Five built-in themes (*Claro*, *Papel*, *Crepúsculo*, *Escuro*, and *Alto Contraste*) with verified WCAG contrast standards, visible keyboard navigation, and motion-reduction support.
+- **Bilingual (PT / EN):** Every article, guide, tool, game, and terminal command provides first-class support in Portuguese and English.
+- **Edge Deployment:** Hosted on Cloudflare Workers for instant sub-millisecond global delivery with zero cold starts.
+
+---
+
+## ⚡ Try Tools from the Terminal
+
+Every calculator and utility on Codex Tools can be run directly from your terminal using Deno or Node without installing any package:
 
 ```sh
-deno run -q "https://thecodecodex.com/cli.js?tool=net-salary&bruto=8000"   # net salary as JSON
-curl -s https://thecodecodex.com/cli.js | node --input-type=module - cpf q=3 # three valid test CPFs
-deno run -q "https://thecodecodex.com/cli.js"                                # list every tool
+# Calculate Brazilian CLT net salary with 2026 tax tables:
+deno run -q "https://thecodecodex.com/cli.js?tool=net-salary&bruto=8000"
+
+# Generate 3 valid test CPFs:
+curl -s https://thecodecodex.com/cli.js | node --input-type=module - cpf q=3
+
+# List all available CLI tools:
+deno run -q "https://thecodecodex.com/cli.js"
 ```
 
-## Use our packages
+---
+
+## 📬 Contact, Feedback & Bug Reports
+
+We love feedback! You can reach out directly via:
+
+- **Email:** [`contato.thecodecodex@gmail.com`](mailto:contato.thecodecodex@gmail.com)
+- **Email Subject Tags:**
+  - `[TheCodeCodex] [Bug] [Tools|Games|Portal|Switchyard] <Title>` — to report bugs.
+  - `[TheCodeCodex] [Sugestão] [Tools|Games] <Name>` — to suggest new tools or games.
+  - `[TheCodeCodex] [Contato] [Project]` — for general inquiries and feedback.
+- **In-App Buttons:** Every tool features a contextual **"Reportar bug" / "Report a bug"** button that automatically pre-populates the current URL and page details.
+
+---
+
+## 💻 Repository & Contributions
+
+The primary monorepo is located at [**github.com/thecodecodex/thecodecodex**](https://github.com/thecodecodex/thecodecodex).
 
 ```sh
-pnpm add @thecodecodex/tools          # finance (BR), CPF/CNPJ, PDF, table conversion, regex, JWT…
-pnpm add @thecodecodex/design-system  # Tailwind 4 tokens, themes and React components
+git clone git@github.com:thecodecodex/thecodecodex.git
+cd thecodecodex
+pnpm install
+pnpm verify   # runs typecheck, lint, and builds across all workspaces
 ```
-
-```ts
-import { isValidCpf } from "@thecodecodex/tools/br/cpf"
-import { NumberField, Segmented } from "@thecodecodex/design-system"
-```
-
-## Working on the projects
-
-Every JavaScript project uses pnpm and the same script names:
-
-| Script | What it does |
-| --- | --- |
-| `pnpm typecheck` | Type check (`tsc` or `astro check`) |
-| `pnpm lint` | Lint without changing files (`lint:fix` applies the fixes) |
-| `pnpm test` | Unit tests |
-| `pnpm check` | `typecheck` + `lint` + `test` |
-| `pnpm verify` | Everything GitHub Actions validates before a deploy or publish (`check` plus builds) |
-
-Run `pnpm verify` before pushing to catch locally what would fail in CI.
